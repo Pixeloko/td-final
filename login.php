@@ -1,23 +1,12 @@
 <?php
 require_once("./includes/header.php");
+require_once("./Model/config.php");
 
 // Démarre la session si pas déjà fait
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ----- Connexion à la base de données -----
-$host = "localhost:5555";
-$dbname = "tpFinal"; // change avec ta BDD
-$user = "root"; // ton utilisateur MySQL
-$passwordDB = "0000"; // ton mot de passe MySQL
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $passwordDB);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion à la base : " . $e->getMessage());
-}
 
 // ----- Initialisation -----
 $errors = [];
