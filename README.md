@@ -16,9 +16,9 @@ tp-final/
    ├── Model/              
    │   └── PublicationModel.php
    ├── View/               # Les html/formulaires
-   │   ├── home.php          # Vue principale
+   │   ├── home.php          # Vue par défaut
    │   └── publish.php       # Formulaire de publication
    │
-   └── config/               
-        └── database.sql     # (Pixeloko)
-
+   ├── config/               
+   │     └── database.sql     # (Pixeloko)
+   └──.htaccess (#Pixeloko)

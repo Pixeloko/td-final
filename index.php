@@ -1,26 +1,19 @@
 <?php
 
-    $uri = isset($_GET['uri']) ? '/' . trim($_GET['uri'], '/') : '/';
-    
-    if ($uri === '/liste') {
-        // require './Controller/';
-    
-    } else {
-        echo 'Page non trouvée.';
-    }
-    
-    require_once "./includes/header.php"
+$url = $_GET['url'] ?? '';
 
-    try {
-        posts = getPost();
-    } catch (PDOException $e) {
-            $errors["general"] = "Erreur : " . $e->getMessage();
-        }
-?>
+switch ($url) {
+    case '':
+        require __DIR__ . '/View/home.php';
+        break;
+        
+    case 'login':
 
-<main>
-    <?php if (isset($errors["general"])): ?>
-        <div style="color:red"><?= htmlspecialchars($errors["general"]) ?></div>
-    <?php endif ?>
-    
-</main>
+        require __DIR__ . '/login.php';
+        break;
+
+    default:
+        http_response_code(404);
+        echo 'Page non trouvée';
+        break;
+}
