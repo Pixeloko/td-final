@@ -7,9 +7,9 @@ switch ($url) {
         require __DIR__ . '/View/home.php';
         break;
         
-    case 'login':
+    case 'post':
 
-        require __DIR__ . '/login.php';
+        require __DIR__ . 'Controller/post.php';
         break;
 
     default:

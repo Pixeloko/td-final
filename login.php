@@ -1,6 +1,5 @@
 <?php
-require_once("./includes/header.php");
-require_once("./Model/config.php");
+require_once("./config.php");
 
 // Démarre la session si pas déjà fait
 if (session_status() === PHP_SESSION_NONE) {
