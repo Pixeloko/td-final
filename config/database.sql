@@ -10,15 +10,14 @@ SET time_zone = "+00:00";
 --
 -- Structure de la table `publication`
 --
-DROP TABLE publication;
 CREATE TABLE publication (
-  id int(11) NOT NULL,
-  title varchar(100) NOT NULL,
-  picture varchar(255) NOT NULL,
-  description text,
-  datetime varchar(30) NOT NULL,
-  is_published tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    picture VARCHAR(255) NOT NULL,
+    description TEXT,
+    datetime VARCHAR(30) NOT NULL,
+    is_published BOOLEAN NOT NULL
+);
 
 
 --

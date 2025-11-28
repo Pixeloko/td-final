@@ -33,5 +33,5 @@ function getDatabase(): PDO
         }
     }
 
-    return $pdo;
+    return $conn;
 }

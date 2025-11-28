@@ -9,7 +9,7 @@ switch ($url) {
         
     case 'post':
 
-        require __DIR__ . 'Controller/post.php';
+        require __DIR__ . '/View/publish.php';
         break;
 
     default:
