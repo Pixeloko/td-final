@@ -1,6 +1,7 @@
 <?php
 
-include_once "./config.php";
+include_once __DIR__ . "/../config.php";
+
 
 /**
  * Récupérer les données d'une publication avec son id
@@ -74,27 +75,19 @@ function markPostAsPublished(int $postId, int $published): bool {
  * @param int $picturePath
  * @return int retourne l'id de la publication créée
  */
-function createPost(string $title, string $description, string $picturePath): int {
+function createPost(string $title, string $description, string $picturePath): bool {
     $conn = getDatabase();
 
-    // Création de la date au format France avec le bon fuseau horaire
-    date_default_timezone_set('Europe/Paris');
-    $datetime = date('Y-m-d H:i');
-    
-    // Modification de la requête pour inclure is_published
-    $stmt = $conn->prepare("INSERT INTO publication (title, picture, description, datetime, is_published)
-                            VALUES (:title, :picture, :description, :datetime, 1)");
-    
-    $params = [
+    $stmt = $conn->prepare("
+        INSERT INTO publication (title, description, picture)
+        VALUES (:title, :description, :picture)
+    ");
+
+    return $stmt->execute([
         "title" => $title,
-        "picture" => $picturePath,
         "description" => $description,
-        "datetime" => $datetime
-    ];
-
-    $stmt->execute($params);
-
-    return $conn->lastInsertId();
+        "picture" => $picturePath
+    ]);
 }
 
 /**

@@ -1,14 +1,20 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Interdire uniquement l'accès DIRECT depuis l'URL
+    RewriteRule ^(Controller|Model|config)/.*$ - [L,F]
+
+    # MAIS permettre les includes PHP internes
+    # Rien à faire ici : PHP peut lire les fichiers du serveur
+
+    # Laisser passer les assets
+    RewriteCond %{REQUEST_URI} ^/assets/ [NC]
+    RewriteRule ^ - [L]
+
+    # Redirection vers index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-    
-    RewriteRule ^(Controller|Model|View|config)/ - [F]
-    
-    RewriteCond %{REQUEST_URI} ^/assets/ [NC]
-    RewriteRule ^ - [L]
 </IfModule>
 
 Options -Indexes

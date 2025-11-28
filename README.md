@@ -7,15 +7,14 @@ Création d'un site similaire à Instagram.
 tp-final/
    ├── assets/              
    │   ├── css/             # (Bilel)
-   │   └── uploads/         # Images uploadées (Yesil-maker)
+   │   └── uploads/         # Images uploadées (Yesil)
    ├── index.php            # Arrivée de l'utilisateur
    ├── publier.php          
-   ├── Controller/         # Les fonctions pour gérer la base de données (Pixeloko)
-   │   ├── post.php
+   ├── controllers/          # Les fonctions pour gérer la base de données (Pixeloko)
    │   └── user.php
    ├── Model/              
-   │   └── PublicationModel.php
-   ├── View/               # Les html/formulaires
+   │   └── publish.php       # Fonctions pour les publications (Yesil)
+   ├── View/                 # Les html/formulaires
    │   ├── home.php          # Vue par défaut
    │   └── publish.php       # Formulaire de publication
    │
