@@ -6,12 +6,12 @@ Création d'un site similaire à Instagram.
 
 tp-final/
    ├── assets/              
-   │   ├── css/             # (Bilel)
+   │   ├── style.css        # (Bilel)
    │   └── uploads/         # Images uploadées (Yesil)
-   ├── index.php            # Arrivée de l'utilisateur
-   ├── publier.php          
+   ├── index.php            # Page de redirections         
    ├── controllers/          # Les fonctions pour gérer la base de données (Pixeloko)
    │   └── user.php
+   │   └── publish.php
    ├── Model/              
    │   └── publish.php       # Fonctions pour les publications (Yesil)
    ├── View/                 # Les html/formulaires
@@ -20,4 +20,4 @@ tp-final/
    │
    ├── config/               
    │     └── database.sql     # (Pixeloko)
-   └──.htaccess (#Pixeloko)
+   └──.htaccess               # (Pixeloko)
