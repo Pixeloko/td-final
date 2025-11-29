@@ -60,7 +60,7 @@ function markPostAsPublished(int $postId, int $published): bool {
 
     $conn = getDatabase();
 
-    $stmt = $conn->prepare("UPDATE publication SET published = :published WHERE id = :postId");
+    $stmt = $conn->prepare("UPDATE publication SET is_published = :published WHERE id = :postId");
 
     return $stmt->execute([
         "postId" => $postId,
@@ -75,7 +75,8 @@ function markPostAsPublished(int $postId, int $published): bool {
  * @param int $picturePath
  * @return int retourne l'id de la publication créée
  */
-function createPost(string $title, string $description, string $picturePath): bool {
+function createPost(string $title, string $description, string $picturePath): int 
+{
     $conn = getDatabase();
 
     $stmt = $conn->prepare("
@@ -83,11 +84,13 @@ function createPost(string $title, string $description, string $picturePath): bo
         VALUES (:title, :description, :picture)
     ");
 
-    return $stmt->execute([
+    $stmt->execute([
         "title" => $title,
         "description" => $description,
         "picture" => $picturePath
     ]);
+
+    return (int)$conn->lastInsertId();
 }
 
 /**

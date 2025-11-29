@@ -5,22 +5,18 @@ $errors = [];
 $title = "";
 $description = "";
 
-// If form submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Get fields
+    // Prendre les inputs
     $title = trim($_POST["title"] ?? "");
     $description = trim($_POST["description"] ?? "");
 
-    // Validate fields
+    // Validation du titre obligatoire
     if ($title === "") {
-        $errors[] = "Title is required.";
-    }
-    if ($description === "") {
-        $errors[] = "Description is required.";
+        $errors[] = "Le titre est requis.";
     }
 
-    // Handle file
+    // Gestion du fichier
     $picturePath = null;
 
     if (!empty($_FILES["image"]["name"])) {
@@ -54,19 +50,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             $picturePath = "assets/uploads/" . $filename;
         } else {
-            $errors[] = "Image upload failed.";
+            $errors[] = "Le téléversement a échoué.";
         }
     } else {
-        $errors[] = "An image is required.";
+        $errors[] = "Une image est requise.";
     }
 
-    // No errors → Insert publication
+    // Pas d'erreur = création du post
     if (empty($errors)) {
-        if (createPost($title, $description, $picturePath)) {
+        $id = createPost($title, $description, $picturePath);
+
+        if (!empty($id)) {
+            // On met la publication comme published
+            markPostAsPublished($id, 1);    
             header("Location: ../View/home.php");
             exit;
         } else {
-            $errors[] = "Database error.";
+            $errors[] = "Erreur de la base de donnée.";
         }
     }
 }
