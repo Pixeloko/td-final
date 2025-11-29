@@ -1,17 +1,31 @@
 <?php
 require_once __DIR__ . "/../Model/publish.php";
 
+session_start();
+
+// Générer le token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 $errors = [];
 $title = "";
 $description = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Prendre les inputs
+    // Vérification du token
+    if (
+        !isset($_POST['csrf_token']) ||
+        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ) {
+        die("CSRF token invalide");
+    }
+
+    // Inputs
     $title = trim($_POST["title"] ?? "");
     $description = trim($_POST["description"] ?? "");
 
-    // Validation du titre obligatoire
     if ($title === "") {
         $errors[] = "Le titre est requis.";
     }
@@ -27,42 +41,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mkdir($uploadDir, 0777, true);
         }
 
-        $filename = time() . "_" . basename($_FILES["image"]["name"]);
+        $extension = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
+        $filename = time() . "_" . bin2hex(random_bytes(8)) . "." . $extension;
+
         $targetFile = $uploadDir . $filename;
 
         // Vérifications du type
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $detectedType = finfo_file($fileInfo, $_FILES["image"]["tmp_name"]);
-        
+        finfo_close($fileInfo);
+
         if (!in_array($detectedType, $allowedTypes)) {
             $errors[] = "Seuls les fichiers JPEG, PNG et GIF sont autorisés.";
         }
-        // Vérifier l'extension
-        elseif (!in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif'])) {
+        elseif (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
             $errors[] = "Extension de fichier non autorisée.";
         }
-        // Vérifier la taille
         elseif ($_FILES["image"]["size"] > 5000000) {
             $errors[] = "Le fichier est trop volumineux (max 5Mo).";
         }
 
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
-            $picturePath = "assets/uploads/" . $filename;
-        } else {
-            $errors[] = "Le téléversement a échoué.";
+        // Placement du fichier
+        if (empty($errors)) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+                $picturePath = "assets/uploads/" . $filename;
+            } else {
+                $errors[] = "Le téléversement a échoué.";
+            }
         }
+
     } else {
-        $errors[] = "Une image est requise.";
+        // Aucun fichier envoyé → image obligatoire
+        $errors[] = "Rentrer une image.";
     }
 
-    // Pas d'erreur = création du post
+    // Création du post
     if (empty($errors)) {
         $id = createPost($title, $description, $picturePath);
 
         if (!empty($id)) {
-            // On met la publication comme published
-            markPostAsPublished($id, 1);    
+            markPostAsPublished($id, 1);
             header("Location: ../View/home.php");
             exit;
         } else {

@@ -31,7 +31,9 @@
                    value="<?= htmlspecialchars($title) ?>" 
                    required>
         </div>
-
+        <div>
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+        </div>
         <div class="form-group">
             <label for="description">Description</label>
             <textarea id="description" name="description" 
