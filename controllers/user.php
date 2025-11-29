@@ -12,7 +12,6 @@ function getUserById(int $id): ?array {
 }
 
 function getUserByEmail(string $email): ?array {
-
     $conn = getDatabase();
 
     $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
