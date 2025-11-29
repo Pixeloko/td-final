@@ -6,19 +6,19 @@ Création d'un site similaire à Instagram.
 
 tp-final/
    ├── assets/              
-   │   ├── style.css        # (Bilel)
+   │   ├── style.css        # (Bilal)
    │   └── uploads/         # Images uploadées (Yesil)
    ├── index.php            # Page de redirections         
    ├── controllers/         # Les fonctions pour gérer la base de données (Pixeloko)
    │   └── user.php
-   │   └── admin.php         # PHP gèrant la view admin
+   │   └── admin.php         # PHP gèrant la view admin (Yesil)
    │   └── publish.php
    ├── Model/              
    │   └── publish.php       # Fonctions pour les publications (Yesil)
-   │   └── admin.php         # Fonctions delete/modifications (Bilel)
+   │   └── admin.php         # Fonctions delete/modifications (Bilal)
    ├── View/                 # Les html/formulaires
-   │   ├── home.php          # Vue par défaut
-   |   ├── admin.php          
+   │   ├── home.php          # Vue par défaut (Bilal)
+   |   ├── admin.php         # Page pour deletion/modification (Yesil)
    │   └── publish.php       # Formulaire de publication
    │
    ├── config/               
