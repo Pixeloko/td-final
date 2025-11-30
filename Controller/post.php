@@ -1,6 +1,6 @@
 <?php
 
-include_once "./model/config.php";
+include_once "../config.php";
 
 function getPostById(int $id): ?array {
     $conn = getDatabase();
@@ -11,11 +11,18 @@ function getPostById(int $id): ?array {
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
 }
 
-function getPost(): ?array {
+function getPostNotPublished() {
+    $conn = getDatabase();
+    $stmt = $conn->prepare("SELECT * FROM publication WHERE is_published = 0");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPostPublished(): ?array {
 
     $conn = getDatabase();
 
-    $stmt = $conn->prepare("SELECT * FROM puplication");
+    $stmt = $conn->prepare("SELECT * FROM publication WHERE is_published = 1");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,7 +32,7 @@ function getPostByUser(string $userId): array {
 
     $conn = getDatabase();
     
-    $stmt = $conn->prepare("SELECT * FROM products WHERE user_id = :userId");
+    $stmt = $conn->prepare("SELECT * FROM publication WHERE user_id = :userId");
     $stmt->execute([
         "userId" => $userId
     ]);
@@ -33,11 +40,11 @@ function getPostByUser(string $userId): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function markPostAsPublished(int $postId, int $published): bool {
+function markPostAsPublished(int $postId): bool {
 
     $conn = getDatabase();
 
-    $stmt = $conn->prepare("UPDATE publication SET published = :published WHERE id = :postId");
+    $stmt = $conn->prepare("UPDATE publication SET is_published = :published WHERE id = :postId");
 
     return $stmt->execute([
         "postId" => $postId,
@@ -90,3 +97,4 @@ function updateProduct(int $postId, string $name, string $description, string $p
     return $stmt->rowCount() > 0;
 }
 ?>
+
