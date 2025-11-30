@@ -12,6 +12,13 @@ require_once __DIR__ . "/../config/config.php";
 
     <h1>Bienvenue sur la page d'accueil</h1>
 
+    <?php if (isset($_SESSION["message"])): ?>
+        <div style="color: green"><?=  htmlspecialchars($_SESSION["message"]) ?></div>
+    <?php unset($_SESSION["message"]) ?>
+    <?php endif ?>
+
+    <a href="publish.php">Publier une nouvelle image</a>
+
     <?php if (count($posts) === 0): ?>
         <p>Aucune publication n'a été trouvée.</p>
     <?php else: ?>
