@@ -1,4 +1,5 @@
-<?php require_once("./controllers/publish.php"); ?>
+<?php require_once("./controllers/publish.php"); 
+require_once "header.php";?>
 
 
 <!DOCTYPE html>

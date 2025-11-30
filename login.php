@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Connexion réussie
                 $_SESSION["user_id"] = $user["id"]; // attention, ici le nom de la colonne est 'id'
                 $_SESSION["message"] = "✅ Connexion réussie !";
+                $_SESSION["role"] = $user["role"];
                 header("Location: ./View/home.php");
                 exit;
             }

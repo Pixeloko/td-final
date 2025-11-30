@@ -1,7 +1,14 @@
 <?php
-    require_once "header.php";
+require_once "header.php";
 require_once __DIR__ . "/../controllers/admin.php";
 require_once __DIR__ . "/../config/config.php";
+
+// Génération du token 
+session_start();
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
     ?>
 
 <main>
@@ -26,15 +33,18 @@ require_once __DIR__ . "/../config/config.php";
         <tbody>
             <?php foreach($posts as $post): ?>
             <tr>
-                <td><?= $post["title"] ?></td>
-                <td><?= $post["datetime"] ?></td>
+                <td><?= htmlspecialchars($post["title"]) ?></td>
+                <td><?= htmlspecialchars($post["datetime"]) ?></td>
+
                 <td>
                     <form method="GET" action="accepter_post.php">
                         <input type="hidden" name="post" value="<?= htmlspecialchars($post['id']) ?>">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <button type="submit">Accepter</button>
                     </form>
                     <form method="POST">
                         <input type="hidden" name="id" value="<?= $post["id"] ?>">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <button type="submit">Supprimer</button>
                     </form>
                 </td>

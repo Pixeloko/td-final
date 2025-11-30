@@ -78,18 +78,26 @@ function createUser(string $username, string $email, string $password): int {
     return (int) $conn->lastInsertId();
 }
 
-function updateUser(int $id, string $username, string $email, string $password): bool {
-
+function updateUser(int $id, string $username, string $email, ?string $password = null): bool {
     $conn = getDatabase();
 
-    $stmt = $conn->prepare("UPDATE users SET username = :username, email = :email, password = :password WHERE id = :id");
+    // Vérifier unicité
+    $stmt = $conn->prepare("SELECT id FROM users WHERE (email = :email OR username = :username) AND id != :id");
+    $stmt->execute(['email' => $email, 'username' => $username, 'id' => $id]);
+    if ($stmt->fetch()) throw new InvalidArgumentException("Email ou pseudo déjà utilisé.");
 
-    $stmt->execute([
-        'username' => $username,
-        'email'     => $email,
-        'password'  => $password ? password_hash($password, PASSWORD_BCRYPT) : null,
-        'id'        => $id
-    ]);
+    $fields = ['username' => $username, 'email' => $email, 'id' => $id];
+    $sql = "UPDATE users SET username = :username, email = :email";
+
+    if ($password) {
+        $sql .= ", password = :password";
+        $fields['password'] = password_hash($password, PASSWORD_BCRYPT);
+    }
+
+    $sql .= " WHERE id = :id";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute($fields);
 
     return $stmt->rowCount() > 0;
 }

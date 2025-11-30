@@ -18,6 +18,9 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 ) 
+ALTER TABLE users ADD role ENUM('user', 'admin') DEFAULT 'user';
+UPDATE users SET role = 'admin' WHERE email = 'example@user.fr';
+
 
 -- Login
 INSERT INTO users(username, email, password)
