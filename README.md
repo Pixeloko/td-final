@@ -4,7 +4,7 @@ Création d'un site similaire à Instagram.
 
 ## Structure 
 
-tp-final/
+td-final/
    ├── assets/              
    │   ├── style.css        # (Bilal)
    │   └── uploads/         # Images uploadées (Yesil)
@@ -21,6 +21,7 @@ tp-final/
    |   ├── admin.php         # Page pour deletion/modification (Yesil)
    │   └── publish.php       # Formulaire de publication
    │
-   ├── config/               
-   │     └── database.sql     # (Pixeloko)
-   └──.htaccess               # (Pixeloko)
+   ├── config/  
+   |   ├── config.php             
+   │   └── database.sql     # (Pixeloko)
+   └──.htaccess             # (Pixeloko)

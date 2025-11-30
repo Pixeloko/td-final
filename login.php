@@ -1,5 +1,6 @@
 <?php
-require_once("./config.php");
+require_once __DIR__ . "/View/header.php";
+require_once __DIR__ . "/config/config.php";
 
 // Démarre la session si pas déjà fait
 if (session_status() === PHP_SESSION_NONE) {
@@ -14,6 +15,15 @@ $password = "";
 
 // ----- Traitement du formulaire -----
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Vérification CSRF
+    if (
+        !isset($_POST['csrf_token']) ||
+        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ) {
+        die("❌ CSRF token invalide");
+    }
+    
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
 
@@ -28,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Si pas d'erreurs, on cherche l'utilisateur
     if (empty($errors)) {
+        $pdo = getDatabase();
         try {
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute(["email" => $email]);
@@ -39,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Connexion réussie
                 $_SESSION["user_id"] = $user["id"]; // attention, ici le nom de la colonne est 'id'
                 $_SESSION["message"] = "✅ Connexion réussie !";
-                header("Location: dashboard.php");
+                header("Location: ./View/home.php");
                 exit;
             }
         } catch (PDOException $e) {
@@ -71,6 +82,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <p style="color: red"><?= htmlspecialchars($errors["password"]) ?></p>
         <?php endif ?>
     </div>
+    <div>
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+    </div>
 
     <button type="submit">Se connecter</button>
 </form>
+

@@ -1,24 +1,7 @@
 <?php     
-require_once './model/config.php';
+require_once __DIR__ . "/../Model/user.php";
+require_once __DIR__ . "/../config/config.php";
 
-
-function getUserById(int $id): ?array {
-    $conn = getDatabase();
-
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
-    $stmt->execute(["id" => $id]);
-
-    return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-}
-
-function getUserByEmail(string $email): ?array {
-    $conn = getDatabase();
-
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt -> execute(["email" => $email]);
-    $user = $stmt->fetch();
-    return $user ?: null;
-}
 
 function createUser(string $username, string $email, string $password): int {
     

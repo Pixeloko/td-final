@@ -17,6 +17,11 @@ switch ($url) {
         require __DIR__ . '/View/admin.php';
         break;
 
+    case 'login':
+
+        require __DIR__ . '/login.php';
+        break;
+
     default:
         http_response_code(404);
         echo 'Page non trouvée';
