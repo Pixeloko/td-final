@@ -2,21 +2,13 @@
 require_once __DIR__ . "/View/header.php";
 require_once __DIR__ . "/config/config.php";
 
-// Démarre la session si pas déjà fait
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-
-// ----- Initialisation -----
 $errors = [];
 $email = "";
 $password = "";
 
-// ----- Traitement du formulaire -----
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Vérification CSRF
+
     if (
         !isset($_POST['csrf_token']) ||
         !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
@@ -27,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"]);
     $password = trim($_POST["password"]);
 
-    // Validation
+  
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors["email"] = "Veuillez entrer un email valide";
     }
@@ -36,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors["password"] = "Le mot de passe est requis";
     }
 
-    // Si pas d'erreurs, on cherche l'utilisateur
+
     if (empty($errors)) {
         $pdo = getDatabase();
         try {
@@ -47,8 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (!$user || !password_verify($password, $user["password"])) {
                 $errors["general"] = "❌ Identifiants invalides";
             } else {
-                // Connexion réussie
-                $_SESSION["user_id"] = $user["id"]; // attention, ici le nom de la colonne est 'id'
+                $_SESSION["user_id"] = $user["id"];
                 $_SESSION["message"] = "✅ Connexion réussie !";
                 $_SESSION["role"] = $user["role"];
                 header("Location: ./View/home.php");
