@@ -60,6 +60,7 @@ td-final/
 1. git clone https://github.com/Pixeloko/td-final dans le /htdocs 
 2. Importer `config/database.sql` dans MySQL pour créer la base de données et les tables.  
 3. Configurer `config/config.php` avec les identifiants de la DB.  
+4. Créer le dossier uploads dans assets afin d'acueillir les images
 
 ## Contributeurs
 - Pixelolko Lola VANHAVERBEKE
