@@ -1,16 +1,27 @@
-
 <?php
-// Base de données et tableau
+declare(strict_types=1);
 
-    $dsn = "mysql:dbname=ipssi;host=127.0.0.1";
-    $login = "root";
-    $pass = "root";
+function getDatabase(): PDO
+{
+    static $conn = null;
 
-    try{
-        $db = new PDO($dsn,$login,$pass);
-    }catch (Exception $e){
-        var_dump($e);die;
+    if ($conn === null) {
+        try {
+            $conn = new PDO(
+                'mysql:host=127.0.0.1;dbname=ipssi;charset=utf8mb4',
+                'root',
+                'root', 
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]
+            );
+        } catch (PDOException $e) {
+            
+            error_log($e->getMessage());
+            die('Erreur de connexion à la base de données');
+        }
     }
-
-
-    ?>
+    return $conn;
+}
