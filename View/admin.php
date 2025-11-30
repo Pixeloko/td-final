@@ -1,17 +1,34 @@
 <?php 
-    require_once "view/header.php";
-    require_once "controllers/allcontrollers.php";
+    include_once "header.php";
+    include_once "../controllers/allcontrollers.php";
 
-    if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
-        header("Location: index.php");
-        exit;
-    }
+//    if (!isset($_SESSION['user_id']) || $_SESSION['admin'] != 1) {
+//        header("Location: home.php");
+//        exit;
+//    }
 
     $posts = getPostNotPublished();
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $postId = $_POST["id"] ?? null;
+        if ($postId) {
+            deletePost($postId);
+            $_SESSION["message"] = "Tâche supprimée avec succès";
+            header("Location: admin.php");
+            exit;
+        }
+    }
 ?>
 
 <main>
-    <?php if (count($post) === 0): ?>
+    <?php if (isset($_SESSION["message"])): ?>
+        <div style="color: green"><?=  htmlspecialchars($_SESSION["message"]) ?></div>
+    <?php unset($_SESSION["message"]) ?>
+    <?php endif ?>
+    <h1>Admin Dashboard</h1>
+    <h2>Publications en attente de validation</h2>
+    
+    <?php if (count($posts) === 0): ?>
         <p>Il n'y a aucune publication</p>
     <?php else: ?>
         <table border = 1>
@@ -28,12 +45,13 @@
                         <td><?= $post["title"] ?></td>
                         <td><?= formatDate($post["created_at"]) ?></td>
                         <td>
-                            <form class="btn_dash" method="GET" action="updateTask.php">
-                                <input type="hidden" name="id" value="<?= htmlspecialchars($post['id']) ?>">
+                            <form method="GET" action="accepter_post.php">
+                                <input type="hidden" name="post" value="<?= htmlspecialchars($post['id']) ?>">
                                 <button type="submit">Accepter</button>
                             </form>
-                            <form method="POST" action="completeTask.php?task=<?= htmlspecialchars($post['id']) ?>">
-                                <button>Supprimer</button>
+                            <form method="POST">
+                                <input type= "hidden" name="id" value="<?= $post["id"] ?>">
+                                <button type="submit">Supprimer</button>
                             </form>
                         </td>
                     </tr>
