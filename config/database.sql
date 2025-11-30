@@ -4,26 +4,24 @@ CREATE TABLE publication (
     picture VARCHAR(255) NOT NULL,
     description TEXT,
     datetime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_published BOOLEAN NOT NULL
+    is_published BOOLEAN NOT NULL DEFAULT 0
 );
 
-ALTER TABLE votre_table
-MODIFY COLUMN is_published TINYINT(1) NOT NULL DEFAULT 0;
 
 -- Table users
 CREATE TABLE users (
-    id AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-) 
-ALTER TABLE users ADD role ENUM('user', 'admin') DEFAULT 'user';
-UPDATE users SET role = 'admin' WHERE email = 'example@user.fr';
-
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    role enum('user', 'admin') default 'user',
+    username varchar(50) unique not null,
+    email varchar(50) unique not null,
+    password varchar(255) not null,
+    admin BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Login
 INSERT INTO users(username, email, password)
-VALUES("username", "example@user.fr", "$2y$10$fVcspkdGclRx.kelOURoAON04FHu6BcAtvnBVMQLg5emy7.F6sms2");
+VALUES("admin", "admin@gmail.com", "$2y$10$fVcspkdGclRx.kelOURoAON04FHu6BcAtvnBVMQLg5emy7.F6sms2");
 -- password = Password123!
+
 
