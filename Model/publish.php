@@ -31,24 +31,6 @@ function getPost(): ?array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-/* Not used ATM-------------------------------------------------------------------------------
-/**
- * Récupérer les données d'une publication avec son id
- * @param $userId id de l'user
- * @return array avec les publications d'un utilisateur
-
-function getPostByUser(string $userId): array {  
-
-    $conn = getDatabase();
-    
-    $stmt = $conn->prepare("SELECT * FROM publication WHERE user_id = :userId");
-    $stmt->execute([
-        "userId" => $userId
-    ]);
-    
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-*/
 
 /**
  * Met à jour le statut de publication d'une publication
@@ -75,22 +57,21 @@ function markPostAsPublished(int $postId, int $published): bool {
  * @param int $picturePath
  * @return int retourne l'id de la publication créée
  */
-function createPost(string $title, string $description, string $picturePath): int 
-{
+function createPost(string $title, string $description, string $picturePath): int {
     $conn = getDatabase();
 
     $stmt = $conn->prepare("
-        INSERT INTO publication (title, description, picture)
-        VALUES (:title, :description, :picture)
+        INSERT INTO publication(title, picture, description, datetime, is_published)
+        VALUES (:title, :picture, :description, NOW(), 0)
     ");
 
     $stmt->execute([
-        "title" => $title,
-        "description" => $description,
-        "picture" => $picturePath
+        ":title" => $title,
+        ":picture" => $picturePath,
+        ":description" => $description
     ]);
 
-    return (int)$conn->lastInsertId();
+    return intval($conn->lastInsertId());
 }
 
 
